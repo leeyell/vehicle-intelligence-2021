@@ -74,41 +74,61 @@ class ParticleFilter:
     #   Gaussian distribution.
     def update_weights(self, sensor_range, std_landmark_x, std_landmark_y,
                        observations, map_landmarks):
-        # TODO: For each particle, do the following:
-        # 1. Select the set of landmarks that are visible
-        #    (within the sensor range).
-        # 2. Transform each observed landmark's coordinates from the
-        #    particle's coordinate system to the map's coordinates.
-        # 3. Associate each transformed observation to one of the
-        #    predicted (selected in Step 1) landmark positions.
-        #    Use self.associate() for this purpose - it receives
-        #    the predicted landmarks and observations; and returns
-        #    the list of landmarks by implementing the nearest-neighbour
-        #    association algorithm.
-        # 4. Calculate probability of this set of observations based on
-        #    a multi-variate Gaussian distribution (two variables being
-        #    the x and y positions with means from associated positions
-        #    and variances from std_landmark_x and std_landmark_y).
-        #    The resulting probability is the product of probabilities
-        #    for all the observations.
-        # 5. Update the particle's weight by the calculated probability.
+        # 각각의 particle에 대해서...
+        for particle in self.particles:
+            # 1. 해당 particle의 위치에서 sensor_range 이내에 있는
+            #    landmarks들의 목록을  구한다.
+            visible_landmarks = []
+            landmark_id = 0
+            for landmark_id in map_landmarks:
+                dist = distance(map_landmarks[landmark_id], particle)
+                if dist <= sensor_range:
+                    visible_landmarks.append({'x' : map_landmarks[landmark_id]['x'],
+                                              'y' : map_landmarks[landmark_id]['y'],
+                                              'id' : landmark_id})
 
-        pass
+            # 2. 관측된 landmarks(observations)의 좌표를 map 기준 좌표계로 변환한다.
+            observed_in_map = []
+            for observation in observations:
+                x = (particle['x'] + observation['x']*np.cos(particle['t']) 
+                                    - observation['y']*np.sin(particle['t']))
+                y = (particle['x'] + observation['x']*np.sin(particle['t']) 
+                                    - observation['y']*np.cos(particle['t']))
+                observed_in_map.append({'x': x, 'y' : y})
+            
+            # 3. (1)에서 계산한 센서 범위 내의 landmarks와 
+            #    (2)에서 map 좌표계로 변환한 관측된 landmarks 중 같은 것끼리 짝지음.
+            #    아래 함수는 가장 가까운 landmarks list를 리턴한다.
+            assoc = self.associate(visible_landmarks, observed_in_map)
+
+            # 4. assoc에 포함된 각 landmark와 차량 사이의 거리만큼 떨어진 위치에서,
+            #    우리가 얻은 observation이 관측된 확률을 1.0부터 시작하여 누적하여 곱한다.
+            # 5. 하나의 particle에서 계산한 (4)의 최종 값이 해당 particle의 weight가 된다.
+            particle['w'] = 1.0
+            particle['assoc'] = []
+            for i in range(len(assoc)):
+                dist = distance(assoc[i], particle)
+                observ_dist = np.sqrt(observations[i]['x']**2 + observations[i]['y']**2)
+                s = np.sqrt(std_landmark_x**2 + std_landmark_y**2)
+                particle['w'] *= self.norm_pdf(dist, observ_dist, s) + 0.001
+                particle['assoc'].append(assoc[i]['id'])
 
     # Resample particles with replacement with probability proportional to
     #   their weights.
     def resample(self):
-        return
-        # TODO: Select (possibly with duplicates) the set of particles
-        #       that captures the posteior belief distribution, by
-        # 1. Drawing particle samples according to their weights.
-        # 2. Make a copy of the particle; otherwise the duplicate particles
-        #    will not behave independently from each other - they are
-        #    references to mutable objects in Python.
-        # Finally, self.particles shall contain the newly drawn set of
-        #   particles.
-
-        pass
+        # 각 particle들의 weights만 추출하여 list로 만든다.
+        weights = [p['w'] for p in self.particles]
+        # 모든 weight의 합이 1이 되도록 normalize 해준다.
+        weights = [w/sum(weights) for w in weights]
+        # 이 weights 값을 토대로 particle을 샘플링하여 복사본을 만들고,
+        # self.particles를 새로 구성한다.
+        new_particles = []
+        for i in range(0, len(self.particles)):
+            sampled_particle = np.random.choice(self.particles, p=weights)
+            new_particles.append(sampled_particle.copy())
+        
+        del(self.particles)
+        self.particles = new_particles
 
     # Choose the particle with the highest weight (probability)
     def get_best_particle(self):
@@ -117,4 +137,11 @@ class ParticleFilter:
             if p['w'] > highest_weight:
                 highest_weight = p['w']
                 best_particle = p
+
         return best_particle
+
+
+    def norm_pdf(self, x, m, s):
+        one_over_sqrt_2pi = 1 / np.sqrt(2 * np.pi)
+
+        return (one_over_sqrt_2pi / s) * np.exp(-0.5 * ((x - m) / s) ** 2)
