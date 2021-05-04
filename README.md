@@ -16,7 +16,7 @@
 * Week 4 - Motion Model & Particle Filters ([pdf](https://drive.google.com/file/d/1GC_snED24_yyeXYc0N2cDdtN9nLL7MPc/view?usp=sharing))
 * Week 5 - Path Planning & the A* Algorithm ([pdf](https://drive.google.com/file/d/1KmZPesHG-E_DfXbPJxWuOhBIt0G4_n_w/view?usp=sharing))
 * Week 6 - Prediction & Behaviour Planning ([pdf](https://drive.google.com/file/d/15RSC2hIvUgdhfd97YuMDsfG2dmg0h6pl/view?usp=sharing))
-* Week 7 - Hybrid A* Algorithm & Trajectory Generation
+* Week 7 - Hybrid A* Algorithm & Trajectory Generation ([pdf](https://drive.google.com/file/d/1AbAfSNWvsJWcoa7LqvICCsI-O4pNcQz2/view?usp=sharing))
 
 ---
 
@@ -46,3 +46,6 @@
 	- Sung, C., Feldman, D., and Rus, D. [Trajectory clustering for motion prediction](https://ieeexplore.ieee.org/document/6386017). In *Proceedings of the IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)*,  pp. 1547-1552, Oct. 2012.
 	- Xu, H. et *al*. [Unsupervised trajectory clustering via adaptive multi-kernel-based shrinkage](https://ieeexplore.ieee.org/document/7410849). In *Proceedings of the IEEE International Conference on Computer Vision (ICCV)*, pp. 4328-4336, Dec. 2015.
 	- Pitre, R. R., Jilkov, V. P., and Li, X. R. [A comparative study of multiple-model algorithms for maneuvering target tracking](https://doi.org/10.1117/12.609681). In *Proceedings of SPIE 5809, Signal Processing, Sensor Fusion, and Target Recognition XIV*, pp. 549-560, May 2005.
+
+* Week 7
+	- Werling, M. et *al*. [Optimal trajectory generation for dynamic street scenarios in a Frenet frame](https://ieeexplore.ieee.org/document/5509799). In *Proceedings of the IEEE Intl. Conference on Robotics and Automation*, pp. 987-993, May 2010.
