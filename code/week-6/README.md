@@ -72,3 +72,14 @@ You are also invited to experiment with a number of different simulation setting
 and so on.
 
 Remember that our state machine should be geared towards reaching the goal in an *efficient* manner. Try to compare a behaviour that switches to the goal lane as soon as possible (note that the goal position is in the slowest lane in the given setting) and one that follows a faster lane and move to the goal lane as the remaining distance decreases. Observe different behaviour taken by the ego vehicle when different weights are given to different cost functions, and also when other cost metrics (additional cost functions) are used.
+
+***
+
+## Report
+
+#### Task (2) 결과
+
+REACH_GOAL = 50
+EFFICIENCY = 5
+
+![result_img](./result.png)

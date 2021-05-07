@@ -20,11 +20,12 @@ computed by get_helper_data function.
 '''
 
 # weights for costs
-REACH_GOAL = 0
-EFFICIENCY = 0
+REACH_GOAL = 50
+EFFICIENCY = 5
 
 DEBUG = False
 
+# data = [intended_lane, final_lane, distance_to_goal]
 def goal_distance_cost(vehicle, trajectory, predictions, data):
     '''
     Cost increases based on distance of intended lane (for planning a
@@ -32,14 +33,21 @@ def goal_distance_cost(vehicle, trajectory, predictions, data):
     Cost of being out of goal lane also becomes larger as vehicle approaches
     the goal distance.
     '''
-    return 0
+    # 거리가 가까울수록 차선을 빨리 바꾸어주어야 함.
+    intended_lane, final_lane, distance_to_goal = data
+    
+    return (final_lane - vehicle.goal_lane) * 10 / distance_to_goal
 
+LANE_SPEEDS = [6, 7, 8, 9]
 def inefficiency_cost(vehicle, trajectory, predictions, data):
     '''
     Cost becomes higher for trajectories with intended lane and final lane
     that have slower traffic.
     '''
-    return 0
+    # 속도가 빠른 lane 위주로 가야 함.
+    intended_lane, final_lane, distance_to_goal = data
+
+    return vehicle.target_speed - LANE_SPEEDS[final_lane]
 
 def calculate_cost(vehicle, trajectory, predictions):
     '''

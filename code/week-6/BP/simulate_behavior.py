@@ -3,7 +3,7 @@ import time
 import random
 
 # impacts default behavior for most states
-SPEED_LIMIT = 10
+SPEED_LIMIT = 30
 
 # all traffic in lane (besides ego) follow these speeds
 # LANE_SPEEDS = [6, 7, 8]
