@@ -12,6 +12,7 @@ grid = np.array([
 
 # List of possible actions defined in terms of changes in
 # the coordinates (y, x)
+# 현재 차가 보고 있는 방향 theta로 한 칸 이동.
 forward = [
     (-1,  0),   # Up
     ( 0, -1),   # Left
@@ -69,16 +70,53 @@ def optimum_policy_2D(grid, init, goal, cost):
         for y, x, t in p:
             # Mark the final state with a special value that we will
             # use in generating the final path policy.
+            # 목적지를 표시
             if (y, x) == goal and value[(t, y, x)] > 0:
-                # TODO: implement code.
-                pass
+                value[(t, y, x)] = 0
+                policy[(t, y, x)] = -100
+                change = True
             # Try to use simple arithmetic to capture state transitions.
+            # value function과 policy function 계산.
             elif grid[(y, x)] == 0:
-                # TODO: implement code.
-                pass
-    # Now navigate through the policy table to generate a
-    # sequence of actions to take to follow the optimal path.
-    # TODO: implement code.
+                # 할 수 있는 모든 action
+                for action_idx in range(len(action)):
+                    # 해당 action을 취한 후 차량이 보고 있을 방향
+                    theta = (t + action[action_idx]) % 4
+                    # 해당 action을 취한 후 차량의 위치
+                    y_2 = y + forward[theta][0]
+                    x_2 = x + forward[theta][1]
+
+                    # map 안의 갈 수 있는 범위라면
+                    if (x_2 >= 0 and x_2 < grid.shape[1]) and (y_2 >= 0 and y_2 < grid.shape[0]) and grid[y_2, x_2] == 0:
+                        cur_cost = value[theta, y_2, x_2] + cost[action_idx]
+
+                        # 방금의 value가 더 적은 cost였다면 업데이트
+                        if cur_cost < value[t, y, x]:
+                            value[t, y, x] = cur_cost
+                            policy[t, y, x] = action[action_idx]
+                            change = True
+                            
+    # 시작 위치
+    y, x, theta = init
+    policy2D[y, x] = '#'
+    # 목표 지점에 도착할 때까지
+    while policy[theta, y, x] != -100:
+        # 'R'
+        if policy[theta, y, x] == action[0]:
+            theta_2 = (theta - 1) % 4
+        elif policy[theta, y, x] == action[1]:
+            theta_2 = theta
+        else:
+            theta_2 = (theta + 1) % 4
+        
+        # 이동
+        y += forward[theta_2][0]
+        x += forward[theta_2][1]
+        theta = theta_2
+
+        policy2D[y, x] = '*' if policy[theta, y, x] == -100 else action_name[policy[theta, y, x] + 1]
+
+
 
     # Return the optimum policy generated above.
     return policy2D
