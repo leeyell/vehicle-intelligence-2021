@@ -61,7 +61,7 @@ Experiment by tweaking the relative weight for each cost function. It will also 
 #### (1) HybridAStar.expand()
 
 __Input__
-* current: 현재 차량의 state. 위치 정보인 (x, y)와 차량이 어디를 향하고 있는지를 나타내는 theta 값, 몇 번 이동한 것인지, 그리고 goal까지의 cost를 저장하고 있다.
+* current: 현재 차량의 state. 위치 정보인 (x, y)와 차량이 어디를 향하고 있는지를 나타내는 theta 값, 몇 번 이동한 것인지, goal까지의 cost 값들을 저장하고 있다.
 * goal: 목표 지점의 (x, y) 값이다.
 
 앞서 상수로 정해놓은 omega_min 값과 omega_max 범위 내에서 이산적인 간격으로 delta_t 값을 하나씩 가져오는 for 문을 실행한다.
@@ -236,7 +236,7 @@ def search(self, grid, start, goal):
 
 이렇게 코드를 작성하면 동작은 하지만 아래 결과와 같은 문제점이 있다.
 
-![first](./1_1.png)
+![first](./1_1.jpg)
 
 이전 지점인 (x, y)와 다음 지점인 (n_x, n_y)이 장애물인지 아닌지만 확인하고 중간 지점에서는 아무런 검사를 하지 않기 때문에 위 이미지에서 표시한 부분처럼 장애물을 통과하여 경로가 생성되는 문제이다.
 
@@ -296,13 +296,15 @@ def diagonal_obstacle_1(self, x, y, n_x, n_y, grid):
 
 때문에 이 함수에서는 (x, y)와 (n_x, n_y)를 잇는 직선을 구하고 두 지점의 cell이 맞닿는 꼭짓점을 원점으로 했을 때, 이 직선이 지나는 사분면에 장애물이 있는지 아닌지를 확인하는 식으로 구현했다.
 
-위의 함수를 적용한 결과는 아래 사진에 나타나 있다.
+아래 이미지는 위의 함수를 적용한 결과이다.
 
 ![second](./2.png)
 
-장애물이 있는 cell을 통과하던 문제점이 해결된 것을 확인할 수 있었지만, 차량의 speed를 키웠을 때 똑같은 문제점이 또 발견되었다.
+장애물이 있는 cell을 통과하던 문제점이 해결된 것을 확인할 수 있었다.
 
-![third](./3_1.png)
+하지만 차량의 speed를 키웠을 때 똑같은 문제점이 또 발견되었다. (아래 이미지)
+
+![third](./3_1.jpg)
 
 먼저 구현한 함수가 x, y cell에 대해 모두 1씩 증가 또는 감소한 경우만을 따졌기 때문에 이렇게 speed를 크게 설정했을 때 한 번에 두 개 이상의 cell을 이동했을 때를 판단할 수가 없었던 것이 이유였다.
 
