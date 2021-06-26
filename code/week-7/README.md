@@ -420,6 +420,8 @@ def heuristic(self, x, y, goal, distance_method):
     return distance
 ```
 
+***
+
 
 ## Test
 아래 모든 테스트에서 omega_step의 값은 5가 사용되었다.
@@ -524,10 +526,10 @@ speed가 클수록 한 step에 많이 전진하기 때문에 조향각의 범위
 
 아래 이미지는 omega_min, omega_max 값을 각각 -20, 20으로 바꾼 다음 실험한 결과이다.
 
-1. speed = 0.5 <br>
+1. speed = 0.5 (|omega| = 20) <br>
 ![SPEED_0.5_2](./SPEED_0.5_180_20.png)
 
-2. speed = 1.5 <br>
+2. speed = 1.5 (|omega| = 20) <br>
 ![SPEED_1.5_2](./SPEED_1.5_180_20.png)
 
 speed가 작은 경우에는 조향각의 범위가 좁아도 전진 거리 자체가 좁기 때문에 꽤나 부드럽게 이동한다.
