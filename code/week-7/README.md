@@ -428,26 +428,28 @@ def heuristic(self, x, y, goal, distance_method):
 
 speed = 1.0, |omega| = 35
 
-1. NUM_THETA_CELLS = 90
+1. NUM_THETA_CELLS = 90 <br>
 ![NUM_THETA_90](./NUM_THETA_90.png)
 
-2. NUM_THETA_CELLS = 180
+2. NUM_THETA_CELLS = 180 <br>
 ![NUM_THETA_180](./NUM_THETA_180.png)
 
-3. NUM_THETA_CELLS = 270
+3. NUM_THETA_CELLS = 270 <br>
 ![NUM_THETA_270](./NUM_THETA_270.png)
 
-4. NUM_THETA_CELLS = 360
+4. NUM_THETA_CELLS = 360 <br>
 ![NUM_THETA_360](./NUM_THETA_360.png)
 
 차량의 speed를 1.0으로 설정했을 때는 뭔가 크게 달라진 것을 확인할 수 없었다.
 
+<br>
+
 그래서 speed를 0.5로 설정한 다음, NUM_THETA_CELLS = 90일 때와 NUM_THETA_CELLS = 360일 때를 비교해 보았다.
 
-1. NUM_THETA_CELLS = 90 / speed = 0.5 / |omega| = 35
+1. NUM_THETA_CELLS = 90 (speed = 0.5) <br>
 ![NUM_THETA_90_2](./NUM_THETA_90_0.5.png)
 
-2. NUM_THETA_CELLS = 360 / speed = 0.5 / |omega| = 35
+2. NUM_THETA_CELLS = 360 (speed = 0.5) <br>
 ![NUM_THETA_360_2](./NUM_THETA_360_0.5.png)
 
 이렇게 비교하니 NUM_THETA_CELLS 값을 크게 줄수록 차량의 방향을 더욱 세부적으로 나눌 수 있다는 점이 경로가 크게 비뚤어지지 않고 안정적으로 나오게끔 영향을 미친다는 것을 확인할 수 있었다.
@@ -458,14 +460,14 @@ speed = 1.0, |omega| = 35
 
 NUM_THETA_CELLS = 180, speed = 1.0
 
-1. |omega| = 35
+1. |omega| = 35 <br>
 ![MIN_MAX_35](./MIN_MAX_35.png)
 
-2. |omega| = 70
+2. |omega| = 70 <br>
 ![MIN_MAX_70](./MIN_MAX_70.png)
 
-3. |omega| = 105
-![MIN_MAX_105](./MIN_MAX_105_1.png)
+3. |omega| = 105 <br>
+![MIN_MAX_105](./MIN_MAX_105_1.jpg)
 
 조향각의 min, max 값을 더 크게 키울수록 세 번째 이미지에 표시한 구간에서 벽에 가깝게 붙어 이동하도록 최적화되는 것 같다.
 
@@ -477,22 +479,24 @@ NUM_THETA_CELLS = 180, speed = 1.0
 
 ### L1-distance와 L2-distance를 바꾸어 적용했을 때
 
-1. L1-distance
-![L1](./L1_180_1.png)
+1. L1-distance <br>
+![L1](./L1_180_1.jpg)
 
-2. L2-distance
+2. L2-distance <br>
 ![L2](./L2_180.png)
 
-L1-distance의 이미지에 표시한 부분처럼 코너를 돌 때는 L1-distance를 사용했을 때 더 실제 차량처럼 부드럽게 회전하는 것으로 나타났다.
+L1-distance의 이미지에 표시한 부분처럼 코너를 돌 때는 L1-distance를 사용했을 때 더 실제 차량처럼 부드럽게 회전하는 결과가 나왔다.
 
 L1 distance를 사용하면 단순히 x축으로의 거리, y축으로의 거리를 따로 고려하기 때문에, 아래로 쭉 내려오면 되는 초반 구간에서 구불구불하게 내려오지 않을 거라고 생각했지만 L1 distance를 사용해도 비슷한 것처럼 보였다.
 
+<br>
+
 이에 좀더 차량의 상태를 세분화한 환경에서의 결과를 확인해보려고 `NUM_THETA_CELLS`의 값을 360, omega_min과 omega_max 값을 -70, 70으로 설정한 뒤 다시 실행했다.
 
-1. L1-distance: NUM_THETA_CELLS = 360, |omega| = 70
+1. L1-distance (NUM_THETA_CELLS = 360, |omega| = 70) <br>
 ![L1_2](./L1_360_70_1.0.png)
 
-2. L2-distance: NUM_THETA_CELLS = 360, |omega| = 70
+2. L2-distance (NUM_THETA_CELLS = 360, |omega| = 70) <br>
 ![L2_2](./L2_360_70_1.0.png)
 
 역시 크게 의미 있어 보이는 차이를 찾지 못했다.
@@ -503,25 +507,27 @@ L1 distance를 사용하면 단순히 x축으로의 거리, y축으로의 거리
 
 NUM_THETA_CELLS = 180, |omega| = 35
 
-1. speed = 0.5
+1. speed = 0.5 <br>
 ![SPEED_0.5](./SPEED_0.5_180_35.png)
 
-2. speed = 1.0
+2. speed = 1.0 <br>
 ![SPEED_1.0](./SPEED_1.0_180_35.png)
 
-3. speed = 1.5
+3. speed = 1.5 <br>
 ![SPEED_1.5](./SPEED_1.5_180_35.png)
 
 speed가 작을수록 조금씩 전진하여 그때마다의 최적 경로를 탐색하기 때문에 전체적으로 더 부드러운 움직임을 보인다.
+
+<br>
 
 speed가 클수록 한 step에 많이 전진하기 때문에 조향각의 범위가 큰 영향을 미칠 거라고 생각했다.
 
 아래 이미지는 omega_min, omega_max 값을 각각 -20, 20으로 바꾼 다음 실험한 결과이다.
 
-1. speed = 0.5
+1. speed = 0.5 <br>
 ![SPEED_0.5_2](./SPEED_0.5_180_20.png)
 
-2. speed = 1.5
+2. speed = 1.5 <br>
 ![SPEED_1.5_2](./SPEED_1.5_180_20.png)
 
 speed가 작은 경우에는 조향각의 범위가 좁아도 전진 거리 자체가 좁기 때문에 꽤나 부드럽게 이동한다.
